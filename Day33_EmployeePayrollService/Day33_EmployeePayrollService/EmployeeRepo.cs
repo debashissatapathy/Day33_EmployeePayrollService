@@ -40,7 +40,7 @@ namespace Day33_EmployeePayrollService
                             model.Deduction = reader.GetString(6);
                             model.TaxablePay = reader.GetString(7);
                             model.IncomeTax = reader.GetString(8);
-                            model.NetPay = reader.GetString(9);
+                            model.NetPay = reader.GetInt32(9);
                             model.Department = reader.GetString(10);
 
                             Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}", model.EmpId, model.EmpName, model.Gender, model.BasicPay,
@@ -116,33 +116,34 @@ namespace Day33_EmployeePayrollService
             }
             return false;
         }
-        public int updateSalary()
+        public int UpdateSalary()
         {
             connection.Open();
-            SqlCommand command = new SqlCommand("update EmployeeDetails set BasicPay=3000000 where FirstName='Debashis'", connection);
-            SqlCommand command2 = new SqlCommand("update EmployeeDetails set NetPay=3020000 where FirstName='Pramod'", connection);
+            SqlCommand command = new SqlCommand("update employee_payroll set BasicPay=250000 where EmpName='Debashis'", connection);
+            //SqlCommand command2 = new SqlCommand("update employee_payroll set NetPay=3020000 where EmpName='Pramod'", connection);
 
 
             int effectedRow = command.ExecuteNonQuery();
-            int effectedRow1 = command2.ExecuteNonQuery();
+            //int effectedRow1 = command2.ExecuteNonQuery();
 
             if (effectedRow == 1)
             {
-                string query = @"Select BasicPay from employee_payroll where EmpName='Shreya';";
-                SqlCommand cmd = new SqlCommand(query, connection);
+                string query = @"Select BasicPay from employee_payroll where EmpName='Debashis';";
+                SqlCommand cmd = new(query, connection);
                 object res = cmd.ExecuteScalar();
                 connection.Close();
-                model.BasicPay = (string)res;
+                model.BasicPay= (String)res;      
+                               
             }
             connection.Close();
-            return effectedRow1;
+            return effectedRow;
 
         }
         public int CountOfRows()
         {
             connection.Open();
             string query = @"Select count(*) from employee_payroll where Gender='FeMale';";
-            SqlCommand cmd = new SqlCommand(query, connection);
+            SqlCommand cmd = new(query, connection);
             object res = cmd.ExecuteScalar();
             connection.Close();
             int Count = (int)res;
@@ -152,7 +153,7 @@ namespace Day33_EmployeePayrollService
         {
 
             connection.Open();
-            string query = @"Select Avg(NetPay) from employee_payroll where Gender='Male';";
+            string query = @"Select Avg(NetPay) from employee_payroll where Gender='FeMale';";
             SqlCommand cmd = new SqlCommand(query, connection);
             object res = cmd.ExecuteScalar();
             connection.Close();
@@ -163,7 +164,7 @@ namespace Day33_EmployeePayrollService
         {
            
             connection.Open();
-            string query = @"Select Sum(NetPay) from employee_payroll where Gender='Male';";
+            string query = @"Select Sum(NetPay) from employee_payroll where Gender='FeMale';";
             SqlCommand cmd = new SqlCommand(query, connection);
             object res = cmd.ExecuteScalar();
             connection.Close();
@@ -184,7 +185,7 @@ namespace Day33_EmployeePayrollService
         public int MaximumOfSalary()
         {
             connection.Open();
-            string Query = @"Select Max(NetPay) from employee_payroll where Gender = 'Female';";
+            string Query = @"Select Max(NetPay) from employee_payroll where Gender = 'Male';";
             SqlCommand cmd = new SqlCommand(Query, connection);
             object res = cmd.ExecuteScalar();
             int max = (int)res;
@@ -213,7 +214,7 @@ namespace Day33_EmployeePayrollService
                         model.Deduction = reader.GetString(6);
                         model.TaxablePay = reader.GetString(7);
                         model.IncomeTax = reader.GetString(8);
-                        model.NetPay = reader.GetString(9);
+                        model.NetPay = reader.GetInt32(9);
                         model.Department = reader.GetString(10);
 
 
